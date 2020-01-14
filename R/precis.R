@@ -1,4 +1,4 @@
-#' Produces a comparison table
+#' Produces a precis of variables
 #'
 #' @param df a dataframe containing the variables to summarize
 #' @param ... one or more variables to summarize
@@ -11,13 +11,13 @@
 #' 
 #' @examples
 #' \dontrun{}
-#' compare(df, mpg, cyl)
+#' precis(df, mpg, cyl)
 #' 
 #' @import dplyr
 #' 
 #' @export
 
-compare <- function(df, ...,
+precis <- function(df, ...,
                     group_var=NA,
                     types = c("n", "nobs", "nmiss","mean","sd", "min", "p25", "median", "p75", "max"),
                     long=F,
@@ -109,9 +109,9 @@ compare <- function(df, ...,
       select(!! enquo_group_by, N, nobs, nmiss, mean, sd, min, p25, median, p75, max)
   }
   if (long==F){
-    class(results) <- c("freqR_compare_wide",class(results))
+    class(results) <- c("freqR_precis_wide",class(results))
   }else{
-    class(results) <- c("freqR_compare_long",class(results))
+    class(results) <- c("freqR_precis_long",class(results))
   }
   
   

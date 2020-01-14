@@ -210,7 +210,7 @@ printIt <- function(df, breaks=NA, formats=NA, margin=5, title="", divider="", u
 
 #' @export
 
-print.freqR_compare_long <-function(df){
+print.freqR_precis_long <-function(df){
   breaks <- NA
   #formats=c("c", "n0","n0","n0", "n1", "n1", "n1", "n1", "n1", "n1", "n1")
   
@@ -222,7 +222,7 @@ print.freqR_compare_long <-function(df){
   } else{
     formats=c("c", rep("fg3", length(df)-1))
   }
-  title=paste0("\nCOMPARE: ", attr(df, "title"), "\n")
+  title=paste0("\nPRECIS: ", attr(df, "title"), "\n")
   printIt(df, breaks, formats=formats, printTotalRow = T, title=title, printTitleRow=T)
   
   
@@ -230,11 +230,11 @@ print.freqR_compare_long <-function(df){
 
 #' @export
 
-print.freqR_compare_wide <-function(df){
+print.freqR_precis_wide <-function(df){
   breaks <- NA
   #formats=c("c", "n0","n0","n0", "n1", "n1", "n1", "n1", "n1", "n1", "n1")
   formats=c("c", "fg3","fg3","fg3", "fg3", "fg3", "fg3", "fg3", "fg3", "fg3", "fg3")
-  title=paste0("\nCOMPARE: ", attr(df, "title"), "\n")
+  title=paste0("\nPRECIS: ", attr(df, "title"), "\n")
   printIt(df, breaks, formats=formats, ,title=title, printTotalRow = T, printTitleRow=T)
   
 }
