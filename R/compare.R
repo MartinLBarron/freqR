@@ -26,8 +26,12 @@ compare <- function(df, ...,
   enquo_group_by <- enquo(group_var)
   
   
-  enquo_vars <- quos(...)
+  enquo_vars <- enquos(...)
   
+  #Throw error if there is a groupby variable and more than one regular variable
+  if (length(enquo_vars)>1 & !is.na(quo_name(enquo_group_by))){
+    stop("Sorry, you can run this function with more than one var AND a group variable")
+  }
   #limit dataset to only needed variables
   if (is.na(quo_name(enquo_group_by))){
     df <- select(df, !!!enquo_vars)
@@ -92,7 +96,7 @@ compare <- function(df, ...,
   #Now rename n variable for printing
   results <-mutate(results, type=ifelse(type=="myN", "N", type))
 
-  if (long==F){
+  if (long==F & is.na(quo_name(enquo_group_by))){
     rownames(results) <- results$type
     results <- select(results, -type)
     results <- t(results)
@@ -100,9 +104,33 @@ compare <- function(df, ...,
     results$Variables <- row.names(results)
     row.names(results) <- NULL
     results <- select(results, Variables, everything())
+  } else if (long==F){
+    results <-tidyr::spread(results, key=type, value=...) %>%
+      select(!! enquo_group_by, N, nobs, nmiss, mean, sd, min, p25, median, p75, max)
   }
-
-  class(results) <- c("freqR_compare",class(results))
+  if (long==F){
+    class(results) <- c("freqR_compare_wide",class(results))
+  }else{
+    class(results) <- c("freqR_compare_long",class(results))
+  }
+  
+  
+  counter<-0
+  for (var in enquo_vars){
+    if (counter==0) {
+      title=as_name(var)
+    } else{
+    title <- paste0(title, ", ", as_name(var))
+    }
+    counter=counter+1
+  }
+  attr(results, "title") <- title
+  xx<<-title
+  
+  if (!is.na(quo_name(enquo_group_by))){
+    attr(results, "groupvar") <- as_name(enquo_group_by)
+   
+  }
   return(results)
 }
 

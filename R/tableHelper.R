@@ -72,6 +72,10 @@ formatColumn <- function(x, f=NA){
     #numeric2
   } else if (f=="n2"){
     x <- formatC(x, format="f", digits=2, big.mark = ",")
+    
+  } else if (f=="fg3"){
+    x <- formatC(x, format="fg", digits=3, big.mark = ",")
+    
   } else if (f=="asis"){
     x <- x
   }
@@ -102,7 +106,7 @@ DetermineColumnWidths <- function(df){
 # x <- as.data.frame(apply(df,2, formatColumn), stringsAsFactors = F)
 
 # Generic function to lay out table as desired ---------------------------------
-printIt <- function(df, breaks=NA, formats=NA, margin=5, divider="", upperSymbol="-", lowerSymbol="=", center=F, tableSymbol="=", tablePadding=0, spaceSymbol=" ", printTableSymbol=T, printHeaderRow=T, printTotalRow=T,printTitleRow=F){
+printIt <- function(df, breaks=NA, formats=NA, margin=5, title="", divider="", upperSymbol="-", lowerSymbol="=", center=F, tableSymbol="=", tablePadding=0, spaceSymbol=" ", printTableSymbol=T, printHeaderRow=T, printTotalRow=T,printTitleRow=F){
   
   #Convert Dataframe to all character
   #df <- as.data.frame(lapply(df, formatColumn), stringsAsFactors = F)
@@ -136,7 +140,7 @@ printIt <- function(df, breaks=NA, formats=NA, margin=5, divider="", upperSymbol
   
   # Print Title ------------------------------------------------------------
   if (printTitleRow==T){
-    cat("\nFREQUENCY: ", attr(df, "title"), "\n", sep="")
+    cat(title)
   }
   
   # Print Table top ---------------------------------------------------------
@@ -206,12 +210,33 @@ printIt <- function(df, breaks=NA, formats=NA, margin=5, divider="", upperSymbol
 
 #' @export
 
-print.freqR_compare <-function(df){
+print.freqR_compare_long <-function(df){
   breaks <- NA
-  formats=c("c", "n0","n0","n0", "n1", "n1", "n1", "n1", "n1", "n1", "n1")
+  #formats=c("c", "n0","n0","n0", "n1", "n1", "n1", "n1", "n1", "n1", "n1")
   
-  printIt(df, breaks, formats=formats, printTotalRow = T, printTitleRow=F)
+  groupvar <- attr(df, "groupvar", exact=T)
+  title = attr(df, "title", exact=T)
+  
+  if (!is.null(groupvar)){
+    formats=c("asis", "c", "fg3")
+  } else{
+    formats=c("c", rep("fg3", length(df)-1))
+  }
+  title=paste0("\nCOMPARE: ", attr(df, "title"), "\n")
+  printIt(df, breaks, formats=formats, printTotalRow = T, title=title, printTitleRow=T)
+  
+  
+}
 
+#' @export
+
+print.freqR_compare_wide <-function(df){
+  breaks <- NA
+  #formats=c("c", "n0","n0","n0", "n1", "n1", "n1", "n1", "n1", "n1", "n1")
+  formats=c("c", "fg3","fg3","fg3", "fg3", "fg3", "fg3", "fg3", "fg3", "fg3", "fg3")
+  title=paste0("\nCOMPARE: ", attr(df, "title"), "\n")
+  printIt(df, breaks, formats=formats, ,title=title, printTotalRow = T, printTitleRow=T)
+  
 }
 
 #' @export
@@ -221,7 +246,8 @@ print.freqR_freq <-function(df){
   names(df) <- c(attr(df, "title", exact=T), "Freq", "%", "Cum. Freq", "Cum. %")
   
   breaks <- NA
-  printIt(df, breaks, formats=c("c", "n0","n1", "n0", "n1"), printTotalRow = T,printTitleRow=T)
+  title=paste0("\nFREQUENCY: ", attr(df, "title"), "\n")
+  printIt(df, breaks, formats=c("c", "n0","n1", "n0", "n1"), title=title, printTotalRow = T,printTitleRow=T)
   
   missing=attr(df, "MissingRemoved", exact=T)
   if (!is.null(missing)){
@@ -230,4 +256,7 @@ print.freqR_freq <-function(df){
     cat(paste0(attr(df, "title", exact=T), " NA's excluded: ", prettyNum(missing, big.mark=","), " (", formatC(naPercent, digits=1, format="f"), "%)\n\n"))
   }
 }
+
+x <- c(12345, 1234, 123.4, 12.34, 1.234, 1.23567, 1.236)
+formatC(x, format="fg", digits=3, big.mark = ",")
 

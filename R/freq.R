@@ -88,6 +88,8 @@ freq <- function(df, var=NA, plot=T, sort=T, na.rm=F){
   if (na.rm==T){
     attr(df, "MissingRemoved") <- naCount1
   }
+  
+
   #Plot results
   if (plot==T){
     gg <- ggplot(data=df, aes_string(quo_name(enquo_x), "Freq"))

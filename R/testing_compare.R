@@ -17,10 +17,12 @@ testing <- function(){
   test <- compare(df, mpg, cyl, disp, na.rm=T, long = T)
   test
   
-  test <- compare(df, mpg, group_var = cyl, long=T)
+  test <- compare(df, mpg, group_var = cyl, long=T) 
   test
   
-  test2 <-tidyr::spread(test, key=type, value=mpg)
+  test <- compare(df, mpg, group_var = cyl)
+  test
   
+
 }
 
