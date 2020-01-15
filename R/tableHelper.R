@@ -256,7 +256,3 @@ print.freqR_freq <-function(df){
     cat(paste0(attr(df, "title", exact=T), " NA's excluded: ", prettyNum(missing, big.mark=","), " (", formatC(naPercent, digits=1, format="f"), "%)\n\n"))
   }
 }
-
-x <- c(12345, 1234, 123.4, 12.34, 1.234, 1.23567, 1.236)
-formatC(x, format="fg", digits=3, big.mark = ",")
-

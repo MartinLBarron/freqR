@@ -12,15 +12,15 @@ testing <- function(){
   
   
   # Test Summary Means ------------------------------------------------------
-  test <- compare(df, mpg, cyl, disp)
+  test <- precis(df, mpg, cyl, disp, hp, drat, wt, qsec,vs,am, gear, carb )
   test
-  test <- compare(df, mpg, cyl, disp, na.rm=T, long = T)
-  test
-  
-  test <- compare(df, mpg, group_var = cyl, long=T) 
+  test <- precis(df, mpg, cyl, disp, na.rm=F, long = T)
   test
   
-  test <- compare(df, mpg, group_var = cyl)
+  test <- precis(df, mpg, group_var = cyl, long=T) 
+  test
+  
+  test <- precis(df, mpg, group_var = cyl)
   test
   
 
