@@ -3,7 +3,7 @@
 #' @title Caclulate frequencies of variable
 #'
 #' @description
-#' \code{freq} prints a frequency table for each variable passed to it.
+#' \code{freq} prints a frequency table for the variable passed to it.
 #' 
 #' @details
 #' This function prints a frequency table for the variable passed to it.  In
@@ -20,12 +20,13 @@
 #' \dontrun{
 #' freq(iris, Species)
 #'}
-#' @import dplyr
+
 #' @import ggplot2
 #' @import rlang
+#' @import dplyr
+
 #' 
 #' @export
-#' 
 
 freq <- function(df, var=NA, plot=T, sort=T, na.rm=F){
   
@@ -78,7 +79,6 @@ freq <- function(df, var=NA, plot=T, sort=T, na.rm=F){
     df[1] <- factor(df[[1]], levels = df[[1]][order(-df$n)])
   }
   
-  #'     
   #Format name in dataframe
   names(df) <- c(quo_name(enquo_x), "Freq", "Percent", "CumFreq", "CumPercent")
   
@@ -99,6 +99,14 @@ freq <- function(df, var=NA, plot=T, sort=T, na.rm=F){
     print (gg)
   }
   
+  # if (isTRUE(getOption('knitr.in.progress'))){
+  #   print("knitting")
+  #   df <- df %>%
+  #      kable() %>%
+  #      kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
+  # } 
+  
   return(df)
 }
+
 

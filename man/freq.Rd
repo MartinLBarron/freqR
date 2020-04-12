@@ -21,7 +21,7 @@ freq(df, var = NA, plot = T, sort = T, na.rm = F)
 dataframe containing frequencies.
 }
 \description{
-\code{freq} prints a frequency table for each variable passed to it.
+\code{freq} prints a frequency table for the variable passed to it.
 }
 \details{
 freq

@@ -245,9 +245,12 @@ print.freqR_freq <-function(df){
   
   names(df) <- c(attr(df, "title", exact=T), "Freq", "%", "Cum. Freq", "Cum. %")
   
+  
   breaks <- NA
   title=paste0("\nFREQUENCY: ", attr(df, "title"), "\n")
   printIt(df, breaks, formats=c("c", "n0","n1", "n0", "n1"), title=title, printTotalRow = T,printTitleRow=T)
+  
+  
   
   missing=attr(df, "MissingRemoved", exact=T)
   if (!is.null(missing)){
@@ -256,3 +259,52 @@ print.freqR_freq <-function(df){
     cat(paste0(attr(df, "title", exact=T), " NA's excluded: ", prettyNum(missing, big.mark=","), " (", formatC(naPercent, digits=1, format="f"), "%)\n\n"))
   }
 }
+
+
+
+# define a method for objects of the class data.frame
+
+#' @import knitr
+#' @importFrom kableExtra kable_styling
+#' @importFrom kableExtra footnote
+#' @import scales
+#' @export
+
+knit_print.freqR_freq= function(x, ...) {
+  
+  #Rename Columns
+  names(x) <- c(attr(x, "title", exact=T), "Freq", "%", "Cum. Freq", "Cum. %")
+  
+  missing=attr(x, "MissingRemoved", exact=T)
+  if (!is.null(missing)){
+    norig <- sum(x$Freq)+missing
+    naPercent<-(missing/norig)*100
+    fnote<- paste0(attr(x, "title", exact=T), " NA's excluded: ", prettyNum(missing, big.mark=","), " (", formatC(naPercent, digits=1, format="f"), "%)")
+  }
+  
+  #Fix formatting
+  x[,2] <- scales::comma(x[,2])
+  x[,3] <- scales::percent(x[,3], scale=1, accuracy=.1)
+  x[,4] <- scales::comma(x[,4])
+  x[,5] <- scales::percent(x[,5], scale=1,accuracy=.1)
+  
+  #Construct Title
+  title=paste0("FREQUENCY: ", attr(x, "title"), "")
+  
+
+  
+  #Format Table
+  x <- kable(x, caption = title) %>%
+    kable_styling(bootstrap_options = c("striped"), full_width = F, position = "center")
+  
+  # #construct Missing
+  if (!is.null(missing)){
+    x <- x %>%
+      footnote(general=fnote)
+  }
+  
+  res = x #paste(c('', '', x), collapse = '\n')
+  asis_output(res)
+}
+# register the method
+registerS3method("knit_print", "freqR_freq", knit_print.freqR_freq)

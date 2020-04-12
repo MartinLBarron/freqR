@@ -1,0 +1,28 @@
+---
+title: "Untitled"
+author: "Martin Barron"
+date: "4/9/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+library(freqR)
+
+library(forcats)
+dfgss <-gss_cat
+dfgss$year[c(seq(1,1000, by=4))] <- NA
+
+freq(dfgss, year, plot=F)
+
+```
+
+
+
+```{r cars }
+
+freq(dfgss, year, plot=T, na.rm = T)
+
+```
+

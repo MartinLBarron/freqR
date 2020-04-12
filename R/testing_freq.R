@@ -5,6 +5,7 @@
 
 # library(forcats)
 # library(dplyr)
+# library(freqR)
 # dfgss <-gss_cat
 
 # Simple, single ------------------------------------------------------------------
@@ -17,15 +18,18 @@
 # y=dfgss$year
 # freq(y)
 # # Missings ----------------------------------------------------------------
-
+# 
 # dfgss$year[c(seq(1,1000, by=4))] <- NA
-
-# freq(dfgss, year)
+# 
+# x <- freq(dfgss, year)
 # freq(dfgss, year, na.rm=F)
 # freq(dfgss, year, na.rm=T)
 # x <- freq(dfgss, year, na.rm = T)
 # x
-
+# x[,2] <- scales::comma(x[,2])
+# x[,3] <- scales::percent(x[,3], scale=1)
+# x[,4] <- scales::comma(x[,4])
+# x[,5] <- scales::percent(x[,5], scale=1)
 # Multiple variables (DEFUNCT) ------------------------------------------------------
 #freq(dfgss, year, marital, partyid)
 #No longer working
